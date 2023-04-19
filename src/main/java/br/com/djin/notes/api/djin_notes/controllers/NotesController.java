@@ -1,7 +1,6 @@
 package br.com.djin.notes.api.djin_notes.controllers;
 
 import br.com.djin.notes.api.djin_notes.domain.nota.*;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -50,5 +48,12 @@ public class NotesController {
         Nota nota = repository.getReferenceById(data.id());
         nota.updateInfos(data);
         return ResponseEntity.ok(new DataDetailingNote(nota));
+    }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
